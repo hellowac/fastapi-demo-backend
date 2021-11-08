@@ -9,12 +9,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    SERVER_NAME: str
-    SERVER_HOST: AnyHttpUrl
+    SERVER_NAME: str = 'myfastapi.com'
+    SERVER_HOST: AnyHttpUrl = 'http://localhost:8080'
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost", "http://localhost:8081"]
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -24,8 +24,8 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    PROJECT_NAME: str
-    SENTRY_DSN: Optional[HttpUrl] = None
+    PROJECT_NAME: str = 'myfastapi'
+    SENTRY_DSN: Optional[HttpUrl] = ''
 
     @validator("SENTRY_DSN", pre=True)
     def sentry_dsn_can_be_blank(cls, v: str) -> Optional[str]:
@@ -33,10 +33,11 @@ class Settings(BaseSettings):
             return None
         return v
 
-    POSTGRES_SERVER: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
+    POSTGRES_SERVER: str = 'localhost'
+    POSTGRES_USER: str = 'wangchao'
+    POSTGRES_PASSWORD: str = ''
+    POSTGRES_DB: str = 'postgres'
+    # SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = 'postgresql://scott:tiger@localhost/mydatabase'
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
@@ -78,8 +79,8 @@ class Settings(BaseSettings):
         )
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER: EmailStr = "admin@myfastapi.com"
+    FIRST_SUPERUSER_PASSWORD: str = "myfastapi"
     USERS_OPEN_REGISTRATION: bool = False
 
     class Config:
